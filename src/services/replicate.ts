@@ -112,10 +112,11 @@ async function pollForResult(getUrl: string): Promise<ReplicateResponse> {
       throw new Error(result.error || "Image enhancement failed");
     }
     
-    if (result.status !== "succeeded") {
+    // Fix the type comparison issue - check if status is not succeeded or failed
+    if (result.status !== "succeeded" && result.status !== "failed" && result.status !== "canceled") {
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
-  } while (result.status !== "succeeded" && result.status !== "failed");
+  } while (result.status !== "succeeded" && result.status !== "failed" && result.status !== "canceled");
   
   return result;
 }

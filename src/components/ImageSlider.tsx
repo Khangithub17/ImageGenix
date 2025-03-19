@@ -195,8 +195,9 @@ const ImageSlider = () => {
         </div>
       )}
       
-      {/* Custom CSS for toggle switch */}
-      <style jsx>{`
+      {/* CSS for toggle switch - Fix for the JSX issue */}
+      <style>
+        {`
         .toggle-checkbox:checked {
           right: 0;
           border-color: #3b82f6;
@@ -213,7 +214,8 @@ const ImageSlider = () => {
         .toggle-label {
           transition: background-color 0.2s ease;
         }
-      `}</style>
+        `}
+      </style>
     </div>
   );
 };
