@@ -195,7 +195,7 @@ const ImageSlider = () => {
         </div>
       )}
       
-      {/* CSS for toggle switch - Fix for the JSX issue */}
+      {/* CSS for toggle switch */}
       <style>
         {`
         .toggle-checkbox:checked {

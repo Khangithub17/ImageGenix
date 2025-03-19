@@ -11,13 +11,21 @@ interface ReplicateResponse {
     cancel: string;
   };
   created_at: string;
+  started_at?: string;
   completed_at: string | null;
   status: "starting" | "processing" | "succeeded" | "failed" | "canceled";
-  input: Record<string, any>;
+  input: {
+    image: string;
+    scale: number;
+    face_enhance: boolean;
+  };
   output: string | null;
   error: string | null;
   logs: string | null;
-  metrics: Record<string, any>;
+  metrics: {
+    predict_time?: number;
+    total_time?: number;
+  };
 }
 
 export interface EnhanceImageOptions {
@@ -112,11 +120,11 @@ async function pollForResult(getUrl: string): Promise<ReplicateResponse> {
       throw new Error(result.error || "Image enhancement failed");
     }
     
-    // Fix the type comparison issue - check if status is not succeeded or failed
-    if (result.status !== "succeeded" && result.status !== "failed" && result.status !== "canceled") {
+    // Wait before polling again if the process is not completed
+    if (["starting", "processing"].includes(result.status)) {
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
-  } while (result.status !== "succeeded" && result.status !== "failed" && result.status !== "canceled");
+  } while (["starting", "processing"].includes(result.status));
   
   return result;
 }
