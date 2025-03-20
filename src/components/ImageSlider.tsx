@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import BeforeAfterSlider from "./BeforeAfterSlider";
 import ImageUpload from "./ImageUpload";
@@ -10,9 +9,13 @@ import { toast } from "sonner";
 // Default sample image
 const DEFAULT_IMAGE = "/lovable-uploads/b98ccf1d-f877-4d9c-88da-7d1aa740e30d.png";
 
-const ImageSlider = () => {
+interface ImageSliderProps {
+  setEnhancedImage: (image: string | null) => void;
+}
+
+const ImageSlider: React.FC<ImageSliderProps> = ({ setEnhancedImage }) => {
   const [sourceImage, setSourceImage] = useState<string | null>(null);
-  const [enhancedImage, setEnhancedImage] = useState<string | null>(null);
+  const [enhancedImage, setEnhancedImageState] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [options, setOptions] = useState<EnhanceImageOptions>({
     scale: 2,
@@ -35,6 +38,7 @@ const ImageSlider = () => {
       setIsProcessing(true);
       const result = await enhanceImage(sourceImage, options);
       setEnhancedImage(result);
+      setEnhancedImageState(result);
       toast.success("Image enhanced successfully!");
     } catch (error) {
       console.error("Error processing image:", error);
@@ -48,6 +52,7 @@ const ImageSlider = () => {
   const handleImageSelected = (imageUrl: string) => {
     setSourceImage(imageUrl);
     setEnhancedImage(null); // Reset enhanced image when source changes
+    setEnhancedImageState(null); // Reset local state
   };
 
   // Handle option changes

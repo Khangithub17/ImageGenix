@@ -1,9 +1,19 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import ImageSlider from '@/components/ImageSlider';
-import { Heart, Sparkles, Wand2, Image as ImageIcon } from 'lucide-react';
+import { Heart, Sparkles, Wand2, Image as ImageIcon, Download } from 'lucide-react';
 
 const Index = () => {
+  const [enhancedImage, setEnhancedImage] = useState<string | null>(null);
+
+  const handleDownload = () => {
+    if (enhancedImage) {
+      const link = document.createElement('a');
+      link.href = enhancedImage;
+      link.download = 'enhanced-image.png';
+      link.click();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <header className="p-6 bg-white bg-opacity-70 backdrop-blur-sm border-b border-gray-200">
@@ -24,9 +34,20 @@ const Index = () => {
       </header>
       
       <main className="py-12">
-        <ImageSlider />
+        <ImageSlider setEnhancedImage={setEnhancedImage} />
+        <div className="flex justify-center mt-8">
+          {enhancedImage && (
+        <button 
+          onClick={handleDownload} 
+          className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg shadow-md hover:translate-y-[-2px] transition-all duration-300 flex items-center gap-2"
+        >
+          <Download className="h-5 w-5" />
+          Download Image
+        </button>
+        //bg-gradient-to-r from-blue-500 to-indigo-600 hover:shadow-lg hover:translate-y-[-2px]
+          )}
+        </div>
       </main>
-      
       <footer className="py-8 px-6 bg-white bg-opacity-80 backdrop-blur-sm border-t border-gray-200 mt-10">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
